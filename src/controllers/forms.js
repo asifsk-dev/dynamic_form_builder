@@ -109,7 +109,7 @@ exports.getById = async (req, res, next) => {
 
 exports.updateForm = async (req, res, next) => {
   try {
-    const form = await Form.find({ _id: req.params.id, isDeleted: false }, {
+    const form = await Form.findOne({ _id: req.params.id, isDeleted: false }, {
       _id: 1,
       title: 1,
       description: 1,
