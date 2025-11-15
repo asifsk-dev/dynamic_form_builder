@@ -21,7 +21,6 @@ exports.fieldSchema = {
         max: Joi.number().optional().messages(errorMessage("Max")),
         regex: Joi.string().trim().optional().messages(errorMessage("Regex"))
       }).optional().messages(errorMessage("Validation")),
-      order: Joi.number().default(0).messages(errorMessage("Order")),
       parentFieldId: Joi.string().trim().allow(null, "").messages(errorMessage("Parent Field ID")),
       parentOptionValue: Joi.string().trim().allow(null, "").messages(errorMessage("Parent Option Value"))
     })

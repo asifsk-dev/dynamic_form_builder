@@ -28,6 +28,12 @@ exports.addField = async (req, res, next) => {
       });
     }
 
+    const maxOrder = form.fields.length > 0 ? Math.max(...form.fields.map(f => f.order || 0)) : 0;
+
+    fields.forEach((field, index) => {
+      field.order = maxOrder + index + 1;
+    });
+
     form.fields.push(...fields);
 
     await form.save();
