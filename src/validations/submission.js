@@ -1,6 +1,24 @@
 const { Joi } = require("express-validation");
 const { errorMessage } = require("../utils/errorMessages");
 
+exports.getAllSubmissionSchema = {
+  params: Joi.object({
+    formId: Joi.string().trim().pattern(/^[0-9a-fA-F]{24}$/).required().messages(errorMessage("Form ID"))
+  }),
+  query: Joi.object({
+    page: Joi.number().optional().messages(errorMessage("Page")),
+    limit: Joi.number().optional().messages(errorMessage("Limit")),
+    filter: Joi.object().pattern(
+      Joi.string().trim().max(255),
+      Joi.alternatives().try(
+        Joi.string().trim().max(1000),
+        Joi.number(),
+        Joi.boolean()
+      )
+    ).optional().messages(errorMessage("Filter"))
+  }).required().unknown(false).empty("")
+};
+
 exports.submitFormSchema = {
   params: Joi.object({
     formId: Joi.string().trim().pattern(/^[0-9a-fA-F]{24}$/).required().messages(errorMessage("Form ID"))
@@ -18,3 +36,9 @@ exports.submitFormSchema = {
     ip: Joi.string().trim().optional().messages(errorMessage("IP"))
   })
 };
+
+exports.exportSubmissionSchema = {
+  params: Joi.object({
+    formId: Joi.string().trim().pattern(/^[0-9a-fA-F]{24}$/).required().messages(errorMessage("Form ID"))
+  })
+}

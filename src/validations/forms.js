@@ -1,6 +1,13 @@
 const { Joi } = require('express-validation');
 const { errorMessage } = require('../utils/errorMessages');
 
+exports.getAllFormsSchema = {
+  query: Joi.object({
+    page: Joi.number().optional().messages(errorMessage('Page')),
+    limit: Joi.number().optional().messages(errorMessage('Limit')),
+  }).required().unknown(false).empty('')
+}
+
 exports.formSchema = {
   body: Joi.object({
     title: Joi.string().trim().max(255).required().messages(errorMessage('Title', null, 255)),

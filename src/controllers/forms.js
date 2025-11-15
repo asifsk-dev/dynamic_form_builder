@@ -3,10 +3,14 @@ const Form = require("../models/Form");
 
 exports.getAllForms = async (req, res, next) => {
   try {
+    const page = parseInt(req.query.page) > 0 ? parseInt(req.query.page) : 1;
+    const limit = parseInt(req.query.limit) > 0 ? parseInt(req.query.limit) : 10;
+    const skip = (page - 1) * limit;
+
+    const totalForms = await Form.countDocuments({ isDeleted: false });
+
     const forms = await Form.aggregate([
-      {
-        $match: { isDeleted: false }
-      },
+      { $match: { isDeleted: false } },
       {
         $project: {
           _id: 1,
@@ -27,12 +31,19 @@ exports.getAllForms = async (req, res, next) => {
           }
         }
       },
-      {
-        $sort: { createdAt: -1 }
-      }
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit }
     ]);
 
-    return res.json({ message: "Forms fetched successfully.", forms });
+    return res.json({
+      message: "Forms fetched successfully.",
+      page,
+      limit,
+      totalForms,
+      totalPages: Math.ceil(totalForms / limit),
+      forms
+    });
   } catch (err) {
     next(err);
   }

@@ -1,9 +1,6 @@
 function validateSubmission(fields, answers) {
   const errors = {};
 
-  console.log(fields)
-  console.log(answers)
-
   const fieldsMap = {};
   fields.forEach(f => {
     fieldsMap[f._id.toString()] = f;
